@@ -102,6 +102,7 @@ def remover_fursona(id_remover):
             print(f"Nenhum encontrado com o ID: {id_remover}.")
 
 while True:
+    os.system('cls' if os.name == 'nt' else 'clear')
     print("="*30)
     print("--- Sistema de Cadastro e Busca de Fursonas ---")
     print("="*30)
