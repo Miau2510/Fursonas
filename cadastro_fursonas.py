@@ -31,17 +31,19 @@ def carregar_fursonas():
     print("\n--- Lista de Fursonas no Banco ---")
     for row in rows:
         # Row [0] é ID, row [1] é nome, etc.
-        print(f"ID: {row[0]} | Nome: {row[1]} | Espécie: {row[2]}")
+        print(f"ID: {row[0]} | Nome: {row[1]} | Espécie: {row[2]} | Em relacionamento: {row[3]} | Conjuge: {row[4]}")
 # Definição de Classe
 class Fursona:
     def __init__(self, nome: str, especie: str, rel: bool, conj=None):
         self.nome = nome.title()
-        self.especie = especie
+        self.especie = especie.lower()
 
         self.rel = rel
         
-        if self.rel:
-            self.conj = conj.title() if conj else None
+        if self.rel and conj:
+            self.conj = conj.title()
+        else:
+            self.conj = None
     # Método de Apresentação    
     def apres(self):
 
