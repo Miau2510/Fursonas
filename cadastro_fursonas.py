@@ -31,7 +31,14 @@ def carregar_fursonas():
     print("\n--- Lista de Fursonas no Banco ---")
     for row in rows:
         # Row [0] é ID, row [1] é nome, etc.
-        print(f"ID: {row[0]} | Nome: {row[1]} | Espécie: {row[2]} | Em relacionamento: {row[3]} | Conjuge: {row[4]}")
+        rel_status = "Sim" if row[3] else "Não"
+        print(f"ID: {row[0]} | Nome: {row[1]} | Espécie: {row[2]} | Em relacionamento: {rel_status} | Conjuge: {row[4]}")
+
+def quantidade_fursonas():
+    comando = "SELECT COUNT(*) FROM fursonas"
+    cursor.execute(comando)
+    qtd = cursor.fetchone()[0]
+    print(f"\nTotal de fursonas cadastrados: {qtd}")
 # Definição de Classe
 class Fursona:
     def __init__(self, nome: str, especie: str, rel: bool, conj=None):
@@ -83,11 +90,12 @@ def fazer_cadastro():
 def mostrar_fursonas():
     os.system('cls' if os.name == 'nt' else 'clear')
     # Mostra todos os usuários cadastrados ao final
-    input("Pressione 'Enter' para ver os resultados..." )
     print("="*30)
     print("--- Resultado dos Cadastros ---")
     print("="*30)
     carregar_fursonas()
+    quantidade_fursonas()
+    input("\nPressione 'Enter' para voltar ao menu principal...")
 
 # Remover Fursona
 def remover_fursona(id_remover):
@@ -103,6 +111,16 @@ def remover_fursona(id_remover):
         else:
             print(f"Nenhum encontrado com o ID: {id_remover}.")
 
+opcoes = {
+    "1": fazer_cadastro,
+    "2": mostrar_fursonas,
+    "3": lambda: 
+            os.system('cls' if os.name == 'nt' else 'clear') or
+            carregar_fursonas() or
+            remover_fursona(int(input("\nDigite o ID do fursona que deseja remover: "))),
+    "4": lambda: (print("Saindo..."), input("Pressione 'Enter' para fechar esta janela..."), exit())
+}
+
 while True:
     os.system('cls' if os.name == 'nt' else 'clear')
     print("="*30)
@@ -115,24 +133,8 @@ while True:
     print("4. Sair")
     escolha = input("Escolha uma opção: ")
 
-    match escolha:
-        case "1":
-            fazer_cadastro()
-        case "2":
-            os.system('cls' if os.name == 'nt' else 'clear')
-            carregar_fursonas()
-            input("\nPressione 'Enter' para voltar ao menu principal...")
-        case "3":
-            os.system('cls' if os.name == 'nt' else 'clear')
-            carregar_fursonas()
-            id_alvo = int(input("\nDigite o ID do fursona que deseja remover: "))
-            remover_fursona(id_alvo)
-            input("\nPressione 'Enter' para voltar...")
-        case "4":
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print("Saindo...")
-            input("Pressione 'Enter' para fechar esta janela...")
-            break
-        case _:
-            print("Opção Inválida! Tente novamente.")
-            input()
+    if escolha in opcoes:
+        opcoes[escolha]()
+    else:
+        print("Opção Inválida! Tente novamente.")
+        input("Pressione 'Enter' para continuar...")
